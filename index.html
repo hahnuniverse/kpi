@@ -1,8 +1,26 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KPI 대시보드 · 파일 분리 예제</title><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css"></head><body><header><div class="eyebrow">업무 데이터를 한눈에 · 가상 KPI 실습</div><h1>KPI 대시보드</h1><p>월·부서별 목표와 실적을 비교합니다.</p></header><main>
-<section class="panel mode-bar"><strong id="mode-label">샘플 모드 · DB 미연결</strong><span id="mode-detail">가상 6건으로 표시합니다. 새로고침하면 초기 상태로 돌아갑니다.</span></section>
-<!--EXTENSION-->
-<section class="panel"><h2>조회 조건</h2><div class="toolbar"><label>월<select id="filter-month"></select></label><label>부서<select id="filter-team"></select></label><label id="user-filter-label" hidden>사용자 UUID<select id="filter-user"></select></label><button id="filter-reset" type="button">필터 초기화</button></div></section>
-<div class="stats" aria-live="polite"><div class="stat"><span>목표 합계</span><strong id="total-target"></strong></div><div class="stat"><span>실적 합계</span><strong id="total-actual"></strong></div><div class="stat"><span>달성률</span><strong id="total-rate"></strong></div><div class="stat"><span>조회 건수</span><strong id="total-count"></strong></div></div>
-<section class="panel"><h2>부서별 달성률</h2><p class="muted">막대는 100%까지 표시하며 실제 달성률은 숫자로 확인합니다.</p><div id="chart"></div></section>
-<section class="panel"><h2>계산 근거표</h2><p id="empty" hidden>조건에 맞는 데이터가 없습니다.</p><div class="table-wrap"><table><thead><tr><th>월</th><th>부서</th><th>목표 원</th><th>실적 원</th><th>달성률</th><th id="owner-head" hidden>사용자 UUID</th><th id="action-head" hidden>편집</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-<p class="footer">달성률 = 실적 합계 ÷ 목표 합계 × 100 · 목표 합계가 0이면 ‘목표 미설정’ · 모든 예시 값은 가상입니다.</p></main><script src="core.js"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="ko">
+<!-- 실습2: 상대 경로 파일을 읽습니다. 더블클릭 실행 시 core.js의 내장 샘플을 사용합니다. -->
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>월간 KPI · 성과 대시보드</title>
+<link rel="stylesheet" href="./style.css">
+<script defer src="./core.js"></script>
+<script defer src="./app.js"></script>
+</head>
+<body>
+<aside class="sidebar"><a class="brand" href="index.html"><span class="brand-icon">K</span> KPI workspace</a><div class="nav-label">WORKSPACE</div><a class="nav-item active" href="#main">▦ <span>성과 대시보드</span></a><div class="sidebar-note"><span class="online-dot"></span> 브라우저 로컬 저장<br><small>실제 데이터베이스 미연결</small></div></aside>
+<main id="main">
+<header><div class="breadcrumb">워크스페이스 <span>/</span> 성과 관리</div><span class="badge">● 샘플 모드</span></header>
+<section class="page-heading"><div><div class="eyebrow">PERFORMANCE OVERVIEW</div><h1>월간 KPI 대시보드</h1><p>목표와 실적을 한눈에, 다음 결정을 명확하게.</p></div><button class="primary" id="add">＋ 실적 입력</button></section>
+<div class="sample-note"><strong>가상 데이터로 둘러보는 중입니다.</strong><span> 입력한 값은 현재 브라우저에만 저장됩니다.</span></div>
+<section class="filters" aria-label="성과 필터"><div><label for="month">조회 월</label><input type="month" id="month" value="2026-10"></div><div><label for="department">부서</label><select id="department"><option value="">전체 부서</option></select></div><button id="reset">필터 초기화</button><span id="scope"></span></section>
+<div id="notice" role="status" aria-live="polite"></div>
+<div id="load-error" class="error-panel" role="alert" hidden><strong>데이터를 불러오지 못했습니다.</strong><p id="load-error-detail"></p><button id="retry">다시 불러오기</button><p>저장된 원본은 변경하지 않았습니다.</p></div>
+<div id="results" aria-live="polite">
+<section class="metrics" aria-label="합계"><article class="metric"><div class="metric-label">목표 합계 <span>₩</span></div><strong id="total-target">—</strong><small>선택한 조건의 목표</small></article><article class="metric"><div class="metric-label">실적 합계 <span>↗</span></div><strong id="total-actual">—</strong><small>선택한 조건의 실적</small></article><article class="metric accent"><div class="metric-label">전체 달성률 <span>◎</span></div><strong id="total-rate">—</strong><small>실적 합계 ÷ 목표 합계 × 100</small></article><article class="metric"><div class="metric-label">목표 대비 차이 <span>±</span></div><strong id="total-gap">—</strong><small>실적 합계 − 목표 합계</small></article></section>
+<section class="panel comparison"><div class="panel-heading"><div><h2>부서별 목표와 실적</h2><p>같은 기준으로 비교하는 월간 성과</p></div><div class="legend"><span><i class="target-key"></i>목표</span><span><i class="actual-key"></i>실적</span><small>단위: 만원</small></div></div><div id="chart"></div></section>
+<section class="panel evidence"><div class="panel-heading"><div><h2>계산 근거표 <span id="row-count" class="count">0</span></h2><p>합계에 반영된 원본 항목입니다. 모든 금액의 단위는 만원입니다.</p></div><span class="table-hint">항목별 입력 · 수정 가능</span></div><div id="empty" class="empty" hidden><span>▤</span><h3>선택한 조건에 데이터가 없습니다</h3><p>월·부서를 바꾸거나 새 실적을 입력해 주세요.</p><button id="empty-add">＋ 실적 입력</button></div><div class="table-scroll" id="table-wrap"><table><caption class="sr-only">월과 부서 필터에 해당하는 목표, 실적 및 근거</caption><thead><tr><th>월</th><th>부서</th><th>지표</th><th class="number">목표</th><th class="number">실적</th><th class="number">달성률</th><th>근거</th><th>관리</th></tr></thead><tbody id="rows"></tbody><tfoot id="totals"></tfoot></table></div></section>
+</div>
+<footer><span>ⓘ 달성률은 항목별 비율의 평균이 아닌, 합계 금액을 기준으로 계산합니다.</span><span>가상 매출 KPI · 실제 경영 자료 아님</span></footer>
+</main>
+<dialog id="editor" aria-labelledby="editor-title"><form id="record-form"><div class="dialog-heading"><div><div class="eyebrow">SAMPLE RECORD</div><h2 id="editor-title">실적 입력</h2></div><button type="button" id="close-dialog" aria-label="입력 창 닫기">✕</button></div><p class="form-note">샘플 모드 · 이 브라우저에만 저장합니다. 금액 단위: 만원</p><div class="form-grid"><div><label for="edit-month">월</label><input id="edit-month" name="month" type="month" required></div><div><label for="edit-dept">부서</label><input id="edit-dept" name="department" maxlength="30" placeholder="예: 영업팀" required></div><div class="full"><label for="edit-metric">지표 이름</label><input id="edit-metric" name="metric" maxlength="60" value="매출" required></div><div><label for="edit-target">목표 (만원)</label><input id="edit-target" name="target" type="number" min="0" max="1000000000000" step="0.01" inputmode="decimal" required></div><div><label for="edit-actual">실적 (만원)</label><input id="edit-actual" name="actual" type="number" min="0" max="1000000000000" step="0.01" inputmode="decimal" required></div><div class="full"><label for="edit-evidence">근거 메모</label><textarea id="edit-evidence" name="evidence" rows="2" maxlength="200" placeholder="예: 가상 월간 매출 집계표" required></textarea></div></div><p id="form-error" role="alert"></p><div class="dialog-actions"><button type="button" id="cancel">취소</button><button class="primary" id="save" type="submit">이 브라우저에 저장</button></div></form></dialog>
+</body></html>

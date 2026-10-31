@@ -1,0 +1,74 @@
+[
+  {
+    "id": "s1",
+    "month": "2026-10",
+    "department": "영업팀",
+    "metric": "매출",
+    "target": 12000,
+    "actual": 13400,
+    "evidence": "가상 자료 · 10월 영업 집계표"
+  },
+  {
+    "id": "s2",
+    "month": "2026-10",
+    "department": "마케팅팀",
+    "metric": "매출",
+    "target": 8000,
+    "actual": 7200,
+    "evidence": "가상 자료 · 10월 캠페인 집계표"
+  },
+  {
+    "id": "s3",
+    "month": "2026-10",
+    "department": "온라인사업팀",
+    "metric": "매출",
+    "target": 10000,
+    "actual": 10800,
+    "evidence": "가상 자료 · 10월 온라인 매출표"
+  },
+  {
+    "id": "s4",
+    "month": "2026-10",
+    "department": "파트너사업팀",
+    "metric": "매출",
+    "target": 6000,
+    "actual": 5100,
+    "evidence": "가상 자료 · 10월 파트너 매출표"
+  },
+  {
+    "id": "s5",
+    "month": "2026-09",
+    "department": "영업팀",
+    "metric": "매출",
+    "target": 11000,
+    "actual": 10300,
+    "evidence": "가상 자료 · 9월 영업 집계표"
+  },
+  {
+    "id": "s6",
+    "month": "2026-09",
+    "department": "마케팅팀",
+    "metric": "매출",
+    "target": 7500,
+    "actual": 7900,
+    "evidence": "가상 자료 · 9월 캠페인 집계표"
+  },
+  {
+    "id": "s7",
+    "month": "2026-09",
+    "department": "온라인사업팀",
+    "metric": "매출",
+    "target": 9000,
+    "actual": 9600,
+    "evidence": "가상 자료 · 9월 온라인 매출표"
+  },
+  {
+    "id": "s8",
+    "month": "2026-09",
+    "department": "파트너사업팀",
+    "metric": "매출",
+    "target": 0,
+    "actual": 900,
+    "evidence": "가상 자료 · 목표 미설정 예시"
+  }
+]
